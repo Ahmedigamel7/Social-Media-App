@@ -22,17 +22,17 @@ export const register = async (req, res, next) => {
         else statusCode = 422;
 
         return res.status(statusCode).json(error);
-    } else
-        try {
-            const hashedPass = await bcrypt.hash(req.body.password, 13);
-            const addUserQ =
-                "INSERT INTO users (`username`, `email`, `password`, `name`) VALUES (?)";
-            const values = [req.body.username, req.body.email, hashedPass, req.body.name];
-            await query(addUserQ, [values]);
-            return res.status(201).json("User has been created.");
-        } catch (error) {
-            next(error);
-        }
+    }
+    try {
+        const hashedPass = await bcrypt.hash(req.body.password, 13);
+        const addUserQ =
+            "INSERT INTO users (`username`, `email`, `password`, `name`) VALUES (?)";
+        const values = [req.body.username, req.body.email, hashedPass, req.body.name];
+        await query(addUserQ, [values]);
+        return res.status(201).json("User has been created.");
+    } catch (error) {
+        next(error);
+    }
 };
 
 export const login = async (req, res, next) => {
@@ -54,9 +54,11 @@ export const login = async (req, res, next) => {
             if (!isCorrectPass)
                 return res.status(400).json("Invalid username or password.");
 
-            const { password, id, ...others } = data[0];
-            const payload = { id };
+            const { password, id, username, email, ...others } = data[0];
+            console.log(others);
+            const payload = { id, username };
             const sign = util.promisify(jwt.sign).bind(jwt);
+
             const token = await sign(payload, process.env.JWT_SECRET);
 
             res.cookie("auth_token", token, {

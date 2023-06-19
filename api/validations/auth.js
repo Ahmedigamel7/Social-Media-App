@@ -8,8 +8,12 @@ export const registerValidation = [
         "username",
         "Invalid username. Please use both alphabetical and numeric characters(letters A-Z, a-z, and numbers 0-9)."
     )
-        .notEmpty()
-        .matches(/^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9]+$/)
+        .notEmpty().bail()
+        .isLength({ min: 6, max: 15 })
+        .withMessage(
+            "Username must be between 6 and 15 alphabetical and numeric characters."
+        )
+        .matches(/^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9]+$/).bail()
         .custom(async (value, { req }) => {
             try {
                 const findUserQ = `SELECT id FROM users WHERE username = ?`;
@@ -22,15 +26,15 @@ export const registerValidation = [
             }
         }),
     body("name", "Invalid name. Please use only alphabetical characters.")
-        .notEmpty()
+        .notEmpty().bail()
         .withMessage("Name is required")
-        .isString()
+        .isString().bail()
         .isAlpha(),
     body(
         "email",
         "Invalid email. Please use only alphanumeric characters (letters A-Z, a-z, and numbers 0-9)."
     )
-        .isEmail()
+        .isEmail().bail()
         .custom(async (value) => {
             try {
                 const q = `SELECT username FROM users WHERE email = ?`;
@@ -64,7 +68,8 @@ export const registerValidation = [
 
 export const loginValidation = [
     body("username", "Invalid username.")
-        .notEmpty()
+        .notEmpty().bail()
+        .isLength({ min: 6, max: 15 }).bail()
         .matches(/^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9]+$/),
-    body("password", "Invalid username or password.").notEmpty().isString().trim(),
+    body("password", "Invalid username or password.").notEmpty().bail().isString().trim(),
 ];

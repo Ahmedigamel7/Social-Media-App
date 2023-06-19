@@ -1,6 +1,8 @@
 import express from "express";
 import dotenv from "dotenv";
 dotenv.config();
+
+// console.log(process.env.JWT_SECRET);
 const app = express();
 import usersRoute from "./routes/usersRoute.js";
 import authRoutes from "./routes/authRoute.js";
