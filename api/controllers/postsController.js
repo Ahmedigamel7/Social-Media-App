@@ -8,15 +8,15 @@ const query = util.promisify(db.query).bind(db);
 export const getPosts = async (req, res, next) => {
   try {
     const username = req.query.username;
-    if (username !== undefined && username?.length < 6 || username?.length > 15)
+    if (username != 'undefined' && username?.length < 6 || username?.length > 15)
       return res.status(400).end();
 
-    const getAllPostsQuery = (username !== undefined) ? `SELECT p.*, u.name, u.profilePic FROM posts AS p JOIN users AS u ON 
+    const getAllPostsQuery = (username != 'undefined') ? `SELECT p.*, u.name, u.profilePic FROM posts AS p JOIN users AS u ON 
            (u.username = p.username) WHERE p.username = ? ORDER BY p.createdAt DESC`
       : `SELECT p.*, u.name, u.profilePic FROM posts AS p JOIN users AS u ON (u.username = p.username)  LEFT JOIN relationships AS r
               ON (p.username = r.followedusername) WHERE r.followerUsername= ? OR p.username =? ORDER BY p.createdAt DESC`;
 
-    const values = username !== undefined ? [username] : [req.username, req.username];
+    const values = username != 'undefined' ? [username] : [req.username, req.username];
     const result = await query(getAllPostsQuery, values);
     return res.status(200).json(result);
   } catch (error) {
