@@ -54,9 +54,9 @@ export const login = async (req, res, next) => {
             if (!isCorrectPass)
                 return res.status(400).json("Invalid username or password.");
 
-            const { password, id, username, email, ...others } = data[0];
+            const { password, id, email, ...others } = data[0];
             console.log(others);
-            const payload = { id, username };
+            const payload = { id, username: others.username };
             const sign = util.promisify(jwt.sign).bind(jwt);
 
             const token = await sign(payload, process.env.JWT_SECRET);
