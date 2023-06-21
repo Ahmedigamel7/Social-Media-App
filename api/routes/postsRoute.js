@@ -9,17 +9,17 @@ const router = express.Router();
 
 router.get("/", verfiyToken, getPosts);
 router.post("/", verfiyToken, postPostValidations, addPost);
-router.delete("/:postId", verfiyToken, deletePost);
+router.delete("/:postId", verfiyToken, paramValidation, deletePost);
 
 router.route("/:postId/likes")
-    .get(verfiyToken, getLikes)
-    .delete(verfiyToken, deleteLike);
+    .get(verfiyToken, paramValidation, getLikes)
+    .delete(verfiyToken, paramValidation, deleteLike);
 router.post('/likes', verfiyToken, bodyPostIdValidation, addLike)
 
 router.route("/:postId/comments")
-    .get(verfiyToken, getComments)
-    .delete(verfiyToken, deleteComment);
+    .get(verfiyToken, paramValidation, getComments)
+    .delete(verfiyToken, paramValidation, deleteComment);
 
-router.post('/comments', verfiyToken, postCommentValidatoins, addComment)
+router.post('/comment', verfiyToken, postCommentValidatoins, addComment)
 
 export default router;
