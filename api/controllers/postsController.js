@@ -26,7 +26,7 @@ export const getPosts = async (req, res, next) => {
 
 export const addPost = async (req, res, next) => {
   const errors = validationResult(req).array();
-  console.log(errors)
+
   if (errors.length > 0) {
     const { msg } = errors[0];
     const error = { msg };
@@ -52,8 +52,10 @@ export const addPost = async (req, res, next) => {
 
 export const deletePost = async (req, res, next) => {
   const errors = validationResult(req).array();
+
   if (errors.length > 0)
     return res.status(400).end();
+
   try {
     const deletePostQuery = "DELETE FROM posts WHERE `id` = ? AND `username` = ?";
     const values = [req.params.postId, req.username];

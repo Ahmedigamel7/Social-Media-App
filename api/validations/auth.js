@@ -26,10 +26,9 @@ export const registerValidation = [
             }
         }),
     body("name", "Invalid name. Please use only alphabetical characters.")
-        .notEmpty().bail()
-        .withMessage("Name is required")
-        .isString().bail()
-        .isAlpha(),
+        .notEmpty().withMessage("Name is required")
+        .bail().isString()
+        .bail().isAlpha(),
     body(
         "email",
         "Invalid email. Please use only alphanumeric characters (letters A-Z, a-z, and numbers 0-9)."
