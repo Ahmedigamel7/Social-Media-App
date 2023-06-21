@@ -15,10 +15,10 @@ export const postPostValidations = [
 
 export const paramValidation = param('postId', 'Invalid postId').notEmpty().bail().isString().trim();
 
-export const bodyPostIdValidation = body('postId', 'Invalid postId').notEmpty().bail().isString().trim();
+export const bodyPostIdValidation = body('postId', 'Invalid postId').notEmpty().bail().isInt({ allow_leading_zeroes: false, gt: 0 });
 
 export const postCommentValidatoins = [
     bodyPostIdValidation,
     body("desc").notEmpty().isString()
-        .bail().isLength({ max: 200 }).withMessage('maximum length is 200 charachters.')
+        .bail().isLength({ min: 1, max: 200 }).withMessage('maximum length is 200 charachters.')
 ]
