@@ -41,6 +41,7 @@ app.use("/api/posts", postsRoute);
 app.use("/api/relationships", relationships);
 
 app.use((err, req, res, next) => {
+    console.log(err)
     const error = { status: err.status || 500, msg: "Something went wrong!" }
     return res.status(error.status).json(error);
 });
