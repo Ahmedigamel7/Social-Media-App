@@ -44,7 +44,9 @@ export const addPost = async (req, res, next) => {
     ];
 
     const result = await query(addPostQuery, [values]);
-    return res.status(201).json(result);
+    return result.affectedRows > 0
+      ? res.status(201).end()
+      : res.status(404).end();
   } catch (error) {
     next(error);
   }
