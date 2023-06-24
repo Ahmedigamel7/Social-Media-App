@@ -11,7 +11,7 @@ export const getLikes = async (req, res, next) => {
      try {
           const getLikesQuery = `SELECT username FROM likes WHERE postId = ?`;
           const likes = await query(getLikesQuery, [req.params.postId]);
-          const users = result.map((like) => like.username)
+          const users = likes.map((like) => like.username)
           return res.status(200).json(users);
      } catch (error) {
           next(error);
