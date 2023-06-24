@@ -5,25 +5,21 @@ import util from "util";
 const query = util.promisify(db.query).bind(db);
 
 export const getLikes = async (req, res, next) => {
-     const error = validationResult(req).array();
-
-     if (error.length > 0)
+     if (validationResult(req).array().length > 0)
           return res.status(400).end();
 
      try {
           const getLikesQuery = `SELECT username FROM likes WHERE postId = ?`;
-          const result = await query(getLikesQuery, [req.params.postId]);
-          const likes = result.map((like) => like.username)
-          return res.status(200).json(likes);
+          const likes = await query(getLikesQuery, [req.params.postId]);
+          const users = result.map((like) => like.username)
+          return res.status(200).json(users);
      } catch (error) {
           next(error);
      }
 };
 
 export const addLike = async (req, res, next) => {
-     const error = validationResult(req).array();
-
-     if (error.length > 0)
+     if (validationResult(req).array().length > 0)
           return res.status(400).end();
 
      try {
@@ -40,9 +36,7 @@ export const addLike = async (req, res, next) => {
 };
 
 export const deleteLike = async (req, res, next) => {
-     const error = validationResult(req).array();
-
-     if (error.length > 0)
+     if (validationResult(req).array().length > 0)
           return res.status(400).end();
 
      try {

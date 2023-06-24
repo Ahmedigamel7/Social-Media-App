@@ -8,7 +8,7 @@ const query = util.promisify(db.query).bind(db);
 export const getPosts = async (req, res, next) => {
   try {
     const username = req.query.username;
-    if (username != 'undefined' && username?.length < 6 || username?.length > 15)
+    if (username == undefined || username != 'undefined' && username?.length < 6 || username?.length > 15)
       return res.status(400).end();
 
     const getAllPostsQuery = (username != 'undefined') ? `SELECT p.*, u.name, u.profilePic FROM posts AS p JOIN users AS u ON 
@@ -53,9 +53,7 @@ export const addPost = async (req, res, next) => {
 };
 
 export const deletePost = async (req, res, next) => {
-  const errors = validationResult(req).array();
-
-  if (errors.length > 0)
+  if (validationResult(req).array().length > 0)
     return res.status(400).end();
 
   try {

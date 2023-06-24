@@ -1,60 +1,62 @@
+
 import db from "../helpers/dbConnection.js";
 import util from "util";
-import jwt from "jsonwebtoken";
+import { validationResult } from "express-validator";
 
-export const getFollower = async (req, res, next) => {
+const query = util.promisify(db.query).bind(db);
+
+export const getFollowers = async (req, res, next) => {
+     if (validationResult(req).array().length > 0)
+          return res.status(400).end();
+
      try {
-          const query = util.promisify(db.query).bind(db);
-          const getFollowerQuery = `SELECT followerUserId FROM follow WHERE followedUserId = ? `;
+          const followedUsername = req.query.followedUsername;
+          const getFollowerQuery = `SELECT followerUsername FROM relationships WHERE followedUsername = ? `;
 
           const result = await query(getFollowerQuery, [
-               req.query.followedUserId,
+               followedUsername,
           ]);
+          const followerUsers = result.map((follower) => follower.followerUsername)
           return res
                .status(200)
-               .json(result.map((follower) => follower.followerUserId));
+               .json(followerUsers);
      } catch (error) {
           next(error);
      }
 };
 
 export const follow = async (req, res, next) => {
+     if (validationResult(req).array().length > 0)
+          return res.status(400).end();
+
      try {
-          // console.log(req.query,req.body)
-          const token = req.cookies.accessToken;
-          if (!token) return res.status(401).json("need to log in");
-
-          const verify = util.promisify(jwt.verify).bind(jwt);
-          const data = await verify(token, "secretkey");
-
-          const query = util.promisify(db.query).bind(db);
+          const followedUsername = req.body.followedUsername;
           const followQuery =
-               "INSERT INTO follow (`followerUserId`, `followedUserId`) VALUES (?)";
-          const values = [data.id, req.body.userId];
+               "INSERT INTO relationships (`followerUsername`, `followedUsername`) VALUES (?)";
+          const values = [req.username, followedUsername];
 
           const result = await query(followQuery, [values]);
-          return res.status(200).json("following");
+          return result.affectedRows > 0
+               ? res.status(201).end()
+               : res.status(404).end();
      } catch (error) {
           next(error);
      }
 };
 
-export const deletefollow = async (req, res, next) => {
+export const unfollow = async (req, res, next) => {
+     if (validationResult(req).array().length > 0)
+          return res.status(400).end();
+
      try {
-          const token = req.cookies.accessToken;
-          if (!token) return res.status(401).json("need to log in");
-
-          const verify = util.promisify(jwt.verify).bind(jwt);
-          const data = await verify(token, "secretkey");
-
-          const query = util.promisify(db.query).bind(db);
+          const followedUsername = req.params.followedUsername;
           const deleteLikeQuery =
-               "DELETE FROM follow WHERE `followerUserId` = ? AND `followedUserId` = ?";
-          console.log(req.query,req.body)
+               "DELETE FROM relationships WHERE `followerUsername` = ? AND `followedUsername` = ?";
+          const result = await query(deleteLikeQuery, [req.username, followedUsername]);
 
-          const result = await query(deleteLikeQuery, [data.id,req.query.userId]);
-          console.log(result)
-          return res.status(200).json("unfollow");
+          return result.affectedRows > 0
+               ? res.status(204).end()
+               : res.status(404).end();
      } catch (error) {
           next(error);
      }

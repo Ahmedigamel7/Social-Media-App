@@ -6,25 +6,21 @@ import { validationResult } from "express-validator";
 const query = util.promisify(db.query).bind(db);
 
 export const getComments = async (req, res, next) => {
-     const error = validationResult(req).array();
-
-     if (error.length > 0)
+     if (validationResult(req).array().length > 0)
           return res.status(400).end();
 
      try {
           const getCommentsQuery = `SELECT c.*, u.username AS username, name, profilePic FROM 
              comments AS c JOIN users AS u ON (c.username= u.username) WHERE c.postId = ? ORDER BY c.createdAt DESC`;
-          const result = await query(getCommentsQuery, [req.params.postId]);
-          return res.status(200).json(result);
+          const comments = await query(getCommentsQuery, [req.params.postId]);
+          return res.status(200).json(comments);
      } catch (error) {
           next(error);
      }
 };
 
 export const addComment = async (req, res, next) => {
-     const error = validationResult(req).array();
-
-     if (error.length > 0)
+     if (validationResult(req).array().length > 0)
           return res.status(400).end();
 
      try {
@@ -47,9 +43,7 @@ export const addComment = async (req, res, next) => {
 
 
 export const deleteComment = async (req, res, next) => {
-     const error = validationResult(req).array();
-
-     if (error.length > 0)
+     if (validationResult(req).array().length > 0)
           return res.status(400).end();
 
      try {

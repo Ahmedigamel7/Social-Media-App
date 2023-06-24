@@ -22,3 +22,4 @@ export const postCommentValidatoins = [
     body("desc").notEmpty().isString()
         .bail().isLength({ min: 1, max: 200 }).withMessage('maximum length is 200 charachters.')
 ]
+

@@ -1,14 +1,16 @@
 import express from "express";
 import {
      follow,
-     deletefollow,
-     getFollower,
+     unfollow,
+     getFollowers,
 } from "../controllers/followsController.js";
+import { verfiyToken } from "../helpers/token.js";
+import { bodyUsernameValidation, paramUsernameValidation, queryUsernameValidation } from "../validations/users.js";
 
 const router = express.Router();
 
-router.get("/", getFollower);
-router.post("/", follow);
-router.delete("/", deletefollow);
+router.get("/", verfiyToken, queryUsernameValidation, getFollowers);
+router.post("/", verfiyToken, bodyUsernameValidation, follow);
+router.delete("/:followedUsername", verfiyToken, paramUsernameValidation, unfollow);
 
 export default router;
