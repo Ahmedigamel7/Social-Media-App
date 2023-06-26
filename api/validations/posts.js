@@ -10,10 +10,12 @@ export const postPostValidations = [
             return true;
 
         })
-    , body('img', 'Invalid image URL.').optional().notEmpty().bail().isString()
+    , body('img', 'Invalid image').optional().notEmpty().bail().isString()
 ]
 
+
 export const paramValidation = param('postId', 'Invalid postId').notEmpty().bail().isString().trim();
+export const storyIdValidation = param('storyId', 'Invalid storyId').notEmpty().bail().isString().trim();
 
 export const bodyPostIdValidation = body('postId', 'Invalid postId').notEmpty().bail().isInt({ allow_leading_zeroes: false, gt: 0 });
 
@@ -23,3 +25,4 @@ export const postCommentValidatoins = [
         .bail().isLength({ min: 1, max: 200 }).withMessage('maximum length is 200 charachters.')
 ]
 
+export const storyImgValidation = body('img', 'Invalid image').optional().notEmpty().bail().isString();

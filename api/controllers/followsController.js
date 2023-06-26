@@ -17,7 +17,7 @@ export const getFollowers = async (req, res, next) => {
                followedUsername,
           ]);
           const followerUsers = result.map((follower) => follower.followerUsername)
-          return res
+          res
                .status(200)
                .json(followerUsers);
      } catch (error) {

@@ -13,7 +13,7 @@ export const getComments = async (req, res, next) => {
           const getCommentsQuery = `SELECT c.*, u.username AS username, name, profilePic FROM 
              comments AS c JOIN users AS u ON (c.username= u.username) WHERE c.postId = ? ORDER BY c.createdAt DESC`;
           const comments = await query(getCommentsQuery, [req.params.postId]);
-          return res.status(200).json(comments);
+          res.status(200).json(comments);
      } catch (error) {
           next(error);
      }

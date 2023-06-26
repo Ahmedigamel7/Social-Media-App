@@ -5,9 +5,7 @@ import util from "util";
 const query = util.promisify(db.query).bind(db);
 
 export const getUser = async (req, res, next) => {
-     const error = validationResult(req).array();
-
-     if (error.length > 0)
+     if (validationResult(req).array().length > 0)
           return res.status(400).end();
 
      try {
