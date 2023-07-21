@@ -1,3 +1,12 @@
+// process.on('unhandledRejection', (err) => {
+//     console.log("UNHANDLED REJECTION.");
+// })
+// process.on("uncaughtException", (err) => {
+//     console.log("UNCAUGHT EXCEPTION, APP SHUTTING NOW!!");
+//     console.log(err.message, err.name);
+//     process.exit(1);
+// });
+
 import express from "express";
 import dotenv from "dotenv";
 dotenv.config();
