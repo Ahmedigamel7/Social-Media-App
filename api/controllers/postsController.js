@@ -13,7 +13,7 @@ export const getPosts = async (req, res, next) => {
 
     const getAllPostsQuery = (username != 'undefined') ? `SELECT p.*, u.name, u.profilePic FROM posts AS p JOIN users AS u ON 
            (u.username = p.username) WHERE p.username = ? ORDER BY p.createdAt DESC`
-      : `SELECT p.*, u.name, u.profilePic FROM posts AS p JOIN users AS u ON (u.username = p.username)  LEFT JOIN relationships AS r
+      : `SELECT DISTINCT p.*, u.name, u.profilePic FROM posts AS p JOIN users AS u ON (u.username = p.username)  LEFT JOIN relationships AS r
               ON (p.username = r.followedusername) WHERE r.followerUsername= ? OR p.username =? ORDER BY p.createdAt DESC`;
 
     const values = username != 'undefined' ? [username] : [req.username, req.username];

@@ -12,7 +12,7 @@ export const getStory = async (req, res, next) => {
 
         const q = (username != 'undefined') ? `SELECT s.id, s.img, s.createdAt AS 'img-date', s.username, u.name, u.profilePic, u.coverPic, u.createdAt AS 'account-date' 
         FROM stories AS s JOIN users AS u ON (s.username = u.username) WHERE u.username = ?` :
-            `SELECT u.name, u.username, u.profilePic, u.createdAt AS 'account-date', s.id, s.img, s.createdAt AS 'img-date' FROM users AS u JOIN stories AS s
+            `SELECT DISTINCT u.name, u.username, u.profilePic, u.createdAt AS 'account-date', s.id, s.img, s.createdAt AS 'img-date' FROM users AS u JOIN stories AS s
              ON (u.username=s.username) LEFT JOIN  relationships  AS r 
              ON(s.username=r.followedUsername) WHERE s.username = ? OR r.followerUsername = ?`
             ;
